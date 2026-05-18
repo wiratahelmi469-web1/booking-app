@@ -77,12 +77,23 @@ Route::middleware(['auth'])->group(function () {
             ->take(5)
             ->get();
 
+        $search = request('search');
+
+        $services = Service::when($search, function ($query) use ($search) {
+
+            $query->where('name', 'like', "%{$search}%")
+                ->orWhere('description', 'like', "%{$search}%");
+
+        })->latest()->take(6)->get();
+
         return view('dashboard', compact(
             'totalBookings',
             'pendingBookings',
             'completedBookings',
             'cancelledBookings',
-            'recentBookings'
+            'recentBookings',
+            'services',
+            'search'
         ));
 
     })->name('dashboard');
@@ -267,4 +278,4 @@ Route::middleware(['auth', 'admin'])->group(function () {
 |--------------------------------------------------------------------------
 */
 
-require __DIR__.'/auth.php';    
+require __DIR__.'/auth.php';
