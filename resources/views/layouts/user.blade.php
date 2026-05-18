@@ -8,7 +8,7 @@
     <meta name="viewport"
           content="width=device-width, initial-scale=1.0">
 
-    <title>Booking App</title>
+    <title>User Dashboard</title>
 
     @vite([
         'resources/css/app.css',
@@ -22,7 +22,7 @@
     <div class="flex min-h-screen">
 
         <!-- SIDEBAR -->
-        <aside class="w-64 bg-gray-900 text-white p-6 shadow-lg">
+        <aside class="w-64 bg-blue-600 text-white p-6 shadow-lg">
 
             <!-- LOGO -->
             <div class="mb-10">
@@ -33,9 +33,9 @@
 
                 </h1>
 
-                <p class="text-sm text-gray-400 mt-1">
+                <p class="text-sm text-blue-100 mt-1">
 
-                    Admin Panel
+                    User Panel
 
                 </p>
 
@@ -45,26 +45,26 @@
             <nav class="space-y-2">
 
                 <!-- DASHBOARD -->
-                <a href="/admin/dashboard"
-                   class="block py-3 px-4 rounded-lg hover:bg-gray-700 transition duration-200">
+                <a href="/dashboard"
+                   class="block py-3 px-4 rounded-lg hover:bg-blue-700 transition duration-200">
 
                     Dashboard
 
                 </a>
 
-                <!-- BOOKINGS -->
-                <a href="/admin/bookings"
-                   class="block py-3 px-4 rounded-lg hover:bg-gray-700 transition duration-200">
+                <!-- BOOKING -->
+                <a href="/booking"
+                   class="block py-3 px-4 rounded-lg hover:bg-blue-700 transition duration-200">
 
-                    Bookings
+                    Booking
 
                 </a>
 
-                <!-- SERVICES -->
-                <a href="/admin/services"
-                   class="block py-3 px-4 rounded-lg hover:bg-gray-700 transition duration-200">
+                <!-- MY BOOKINGS -->
+                <a href="/my-bookings"
+                   class="block py-3 px-4 rounded-lg hover:bg-blue-700 transition duration-200">
 
-                    Services
+                    My Bookings
 
                 </a>
 
@@ -83,7 +83,7 @@
 
                     <h2 class="text-2xl font-bold text-gray-800">
 
-                        Admin Dashboard
+                        User Dashboard
 
                     </h2>
 
@@ -125,8 +125,8 @@
                     <div id="dropdownMenu"
                          class="hidden absolute right-0 mt-3 w-56 bg-white rounded-xl shadow-lg border overflow-hidden z-50">
 
-                        <!-- USER INFO -->
-                        <div class="px-5 py-4 border-b bg-gray-50">
+                        <!-- ROLE -->
+                        <div class="px-5 py-3 border-b bg-gray-50">
 
                             <p class="text-sm text-gray-500">
 
@@ -144,7 +144,7 @@
 
                         <!-- PROFILE -->
                         <a href="{{ route('profile') }}"
-                           class="block px-5 py-3 hover:bg-gray-100 transition duration-200">
+                           class="block px-5 py-3 hover:bg-gray-100 transition">
 
                             Profile
 
@@ -160,7 +160,7 @@
                             @csrf
 
                             <button type="submit"
-                                    class="w-full text-left px-5 py-3 text-red-500 hover:bg-red-50 transition duration-200">
+                                    class="w-full text-left px-5 py-3 text-red-500 hover:bg-red-50 transition">
 
                                 Logout
 
@@ -184,8 +184,8 @@
             <!-- FOOTER -->
             <footer class="bg-white border-t px-6 py-4 text-center text-sm text-gray-500">
 
-                © {{ date('Y') }} Booking App —
-                Built with Laravel & Tailwind CSS 
+                 {{ date('Y') }} Booking App —
+                Built with Laravel & Tailwind CSS
 
             </footer>
 

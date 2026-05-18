@@ -16,7 +16,10 @@ class BookingController extends Controller
     {
         $services = Service::latest()->get();
 
-        return view('booking.create', compact('services'));
+        return view(
+            'booking.create',
+            compact('services')
+        );
     }
 
     /**
@@ -25,24 +28,28 @@ class BookingController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'service_id' => 'required',
+            'service_id'   => 'required',
             'booking_date' => 'required|date',
-            'notes' => 'nullable',
+            'notes'        => 'nullable',
         ]);
 
         Booking::create([
-        'user_id' => auth()->id(),
-        'service_id' => $request->service_id,
-        'booking_date' => $request->booking_date,
-        'notes' => $request->notes,
-        'status' => 'pending',
+            'user_id'      => auth()->id(),
+            'service_id'   => $request->service_id,
+            'booking_date' => $request->booking_date,
+            'notes'        => $request->notes,
+            'status'       => 'pending',
         ]);
+
         return redirect('/booking')
-            ->with('success', 'Booking created successfully');
+            ->with(
+                'success',
+                'Booking created successfully'
+            );
     }
 
-        /**
-     * Display bookings
+    /**
+     * Display all bookings (Admin)
      */
     public function index()
     {
@@ -51,42 +58,47 @@ class BookingController extends Controller
             'service'
         ])->latest()->get();
 
-        return view('admin.bookings.index', compact('bookings'));
-    }
-
-        /**
-     * Approve booking
-     */
-    public function approve(Booking $booking)
-    {
-        $booking->update([
-            'status' => 'approved'
-        ]);
-
-        return back();
+        return view(
+            'admin.bookings.index',
+            compact('bookings')
+        );
     }
 
     /**
-     * Complete booking
+     * Update booking status
      */
-    public function complete(Booking $booking)
-    {
+    public function updateStatus(
+        Request $request,
+        Booking $booking
+    ) {
         $booking->update([
-            'status' => 'completed'
+
+            'status' => $request->status,
+
         ]);
 
-        return back();
+        return back()->with(
+            'success',
+            'Booking status updated successfully'
+        );
     }
-        /**
+
+    /**
      * User booking history
      */
     public function history()
     {
         $bookings = Booking::with('service')
-            ->where('user_id', auth()->user()->id)
+            ->where(
+                'user_id',
+                auth()->user()->id
+            )
             ->latest()
             ->get();
 
-        return view('booking.history', compact('bookings'));
+        return view(
+            'booking.history',
+            compact('bookings')
+        );
     }
 }

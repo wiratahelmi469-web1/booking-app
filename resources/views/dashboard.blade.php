@@ -1,17 +1,52 @@
-<x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Dashboard') }}
-        </h2>
-    </x-slot>
+@extends('layouts.user')
 
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-gray-900">
-                    {{ __("You're logged in!") }}
-                </div>
-            </div>
-        </div>
-    </div>
-</x-app-layout>
+@section('content')
+
+<h1 class="text-3xl font-bold mb-8">
+
+    Welcome, {{ auth()->user()->name }}
+
+</h1>
+
+<!-- MENU -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+    <!-- BOOKING -->
+    <a href="/booking"
+       class="bg-white p-6 rounded-xl shadow hover:shadow-lg transition">
+
+        <h2 class="text-2xl font-bold text-blue-500 mb-2">
+
+            Book Service
+
+        </h2>
+
+        <p class="text-gray-500">
+
+            Create a new booking.
+
+        </p>
+
+    </a>
+
+    <!-- HISTORY -->
+    <a href="/my-bookings"
+       class="bg-white p-6 rounded-xl shadow hover:shadow-lg transition">
+
+        <h2 class="text-2xl font-bold text-green-500 mb-2">
+
+            My Bookings
+
+        </h2>
+
+        <p class="text-gray-500">
+
+            View booking history.
+
+        </p>
+
+    </a>
+
+</div>
+
+@endsection

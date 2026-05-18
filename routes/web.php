@@ -2,12 +2,12 @@
 
 use Illuminate\Support\Facades\Route;
 
-use App\Http\Controllers\Admin\ServiceController;
-use App\Http\Controllers\Admin\BookingController;
-
 use App\Models\Booking;
 use App\Models\Service;
 use App\Models\User;
+
+use App\Http\Controllers\Admin\ServiceController;
+use App\Http\Controllers\Admin\BookingController;
 
 /*
 |--------------------------------------------------------------------------
@@ -47,14 +47,41 @@ Route::middleware(['auth'])->group(function () {
     |--------------------------------------------------------------------------
     */
 
-    Route::get('/booking', [BookingController::class, 'create'])
+    Route::get('/booking',
+        [BookingController::class, 'create'])
         ->name('booking.create');
 
-    Route::post('/booking', [BookingController::class, 'store'])
+    Route::post('/booking',
+        [BookingController::class, 'store'])
         ->name('booking.store');
 
-    Route::get('/my-bookings', [BookingController::class, 'history'])
+    /*
+    |--------------------------------------------------------------------------
+    | BOOKING HISTORY
+    |--------------------------------------------------------------------------
+    */
+
+    Route::get('/my-bookings',
+        [BookingController::class, 'history'])
         ->name('booking.history');
+
+});
+
+/*
+|--------------------------------------------------------------------------
+| PROFILE
+|--------------------------------------------------------------------------
+*/
+
+Route::middleware(['auth'])->group(function () {
+
+    Route::get('/profile',
+        function () {
+
+            return view('profile.index');
+
+        })->name('profile');
+
 });
 
 /*
@@ -71,24 +98,45 @@ Route::middleware(['auth', 'admin'])->group(function () {
     |--------------------------------------------------------------------------
     */
 
-   Route::get('/admin/dashboard', function () {
+    Route::get('/admin/dashboard', function () {
 
-    $totalBookings = Booking::count();
+        $totalBookings = Booking::count();
 
-    $totalServices = Service::count();
+        $totalServices = Service::count();
 
-    $totalUsers = User::count();
+        $totalUsers = User::count();
 
-    $pendingBookings = Booking::where('status', 'pending')->count();
+        $pendingBookings = Booking::where(
+            'status',
+            'pending'
+        )->count();
 
-    return view('admin.dashboard', compact(
-        'totalBookings',
-        'totalServices',
-        'totalUsers',
-        'pendingBookings'
-    ));
+        $completedBookings = Booking::where(
+            'status',
+            'completed'
+        )->count();
 
-})->name('admin.dashboard');
+        $cancelledBookings = Booking::where(
+            'status',
+            'cancelled'
+        )->count();
+
+        $revenue = Booking::where(
+            'status',
+            'completed'
+        )->count() * 50000;
+
+        return view('admin.dashboard', compact(
+            'totalBookings',
+            'totalServices',
+            'totalUsers',
+            'pendingBookings',
+            'completedBookings',
+            'cancelledBookings',
+            'revenue'
+        ));
+
+    })->name('admin.dashboard');
 
     /*
     |--------------------------------------------------------------------------
@@ -96,22 +144,30 @@ Route::middleware(['auth', 'admin'])->group(function () {
     |--------------------------------------------------------------------------
     */
 
-    Route::resource('/admin/services', ServiceController::class);
+    Route::resource(
+        '/admin/services',
+        ServiceController::class
+    );
 
     /*
     |--------------------------------------------------------------------------
-    | BOOKING LIST
+    | BOOKING MANAGEMENT
     |--------------------------------------------------------------------------
     */
 
-    Route::get('/admin/bookings', [BookingController::class, 'index'])
+    Route::get('/admin/bookings',
+        [BookingController::class, 'index'])
         ->name('admin.bookings');
 
-    Route::put('/admin/bookings/{booking}/approve',
-        [BookingController::class, 'approve']);
+    /*
+    |--------------------------------------------------------------------------
+    | BOOKING STATUS
+    |--------------------------------------------------------------------------
+    */
 
-    Route::put('/admin/bookings/{booking}/complete',
-        [BookingController::class, 'complete']);
+    Route::patch('/admin/bookings/{booking}/status',
+        [BookingController::class, 'updateStatus'])
+        ->name('admin.bookings.status');
 
 });
 

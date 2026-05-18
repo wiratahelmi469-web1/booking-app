@@ -2,140 +2,190 @@
 
 @section('content')
 
-<h1 class="text-3xl font-bold mb-6">
-    Booking List
-</h1>
+<!-- TITLE -->
+<div class="flex justify-between items-center mb-6">
 
+    <h1 class="text-3xl font-bold">
+
+        Booking List
+
+    </h1>
+
+</div>
+
+<!-- SUCCESS MESSAGE -->
+@if(session('success'))
+
+    <div class="bg-green-100 text-green-700 p-4 rounded-lg mb-6">
+
+        {{ session('success') }}
+
+    </div>
+
+@endif
+
+<!-- TABLE -->
 <div class="bg-white rounded-xl shadow p-6 overflow-x-auto">
 
     <table class="w-full">
 
+        <!-- TABLE HEAD -->
         <thead>
 
             <tr class="border-b">
 
-                <th class="text-left py-3">User</th>
-                <th class="text-left py-3">Service</th>
-                <th class="text-left py-3">Date</th>
-                <th class="text-left py-3">Status</th>
-                <th class="text-left py-3">Notes</th>
+                <th class="text-left py-3">
+                    User
+                </th>
+
+                <th class="text-left py-3">
+                    Service
+                </th>
+
+                <th class="text-left py-3">
+                    Date
+                </th>
+
+                <th class="text-left py-3">
+                    Status
+                </th>
+
+                <th class="text-left py-3">
+                    Action
+                </th>
 
             </tr>
 
         </thead>
 
+        <!-- TABLE BODY -->
         <tbody>
 
             @forelse($bookings as $booking)
 
-            <tr class="border-b">
+                <tr class="border-b">
 
-                <!-- USER -->
-                <td class="py-3">
+                    <!-- USER -->
+                    <td class="py-4">
 
-                    {{ $booking->user->name }}
+                        {{ $booking->user->name }}
 
-                </td>
+                    </td>
 
-                <!-- SERVICE -->
-                <td class="py-3">
+                    <!-- SERVICE -->
+                    <td class="py-4">
 
-                    {{ $booking->service->name }}
+                        {{ $booking->service->name }}
 
-                </td>
+                    </td>
 
-                <!-- DATE -->
-                <td class="py-3">
+                    <!-- DATE -->
+                    <td class="py-4">
 
-                    {{ $booking->booking_date }}
+                        {{ $booking->booking_date }}
 
-                </td>
+                    </td>
 
-                <!-- STATUS -->
-                <td class="py-3">
+                    <!-- STATUS BADGE -->
+                    <td class="py-4">
 
-    @if($booking->status == 'pending')
+                        @if($booking->status == 'pending')
 
-        <span class="bg-yellow-100 text-yellow-700 px-3 py-1 rounded-full text-sm">
+                            <span class="bg-yellow-100 text-yellow-700 px-3 py-1 rounded-full text-sm">
 
-            Pending
+                                Pending
 
-        </span>
+                            </span>
 
-    @elseif($booking->status == 'approved')
+                        @elseif($booking->status == 'approved')
 
-        <span class="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-sm">
+                            <span class="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-sm">
 
-            Approved
+                                Approved
 
-        </span>
+                            </span>
 
-    @elseif($booking->status == 'completed')
+                        @elseif($booking->status == 'completed')
 
-        <span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm">
+                            <span class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm">
 
-            Completed
+                                Completed
 
-        </span>
+                            </span>
 
-    @endif
+                        @elseif($booking->status == 'cancelled')
 
-</td>
+                            <span class="bg-red-100 text-red-700 px-3 py-1 rounded-full text-sm">
 
-                <!-- NOTES -->
-               <!-- ACTION -->
-<td class="py-3">
+                                Cancelled
 
-    <div class="flex gap-2">
+                            </span>
 
-        <!-- APPROVE -->
-        <form action="/admin/bookings/{{ $booking->id }}/approve"
-              method="POST">
+                        @endif
 
-            @csrf
-            @method('PUT')
+                    </td>
 
-            <button class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600">
+                    <!-- ACTION -->
+                    <td class="py-4">
 
-                Approve
+                        <form action="{{ route('admin.bookings.status', $booking->id) }}"
+                              method="POST">
 
-            </button>
+                            @csrf
+                            @method('PATCH')
 
-        </form>
+                            <select name="status"
+                                    onchange="this.form.submit()"
+                                    class="border rounded-lg px-3 py-2">
 
-        <!-- COMPLETE -->
-        <form action="/admin/bookings/{{ $booking->id }}/complete"
-              method="POST">
+                                <option value="pending"
+                                    {{ $booking->status == 'pending' ? 'selected' : '' }}>
 
-            @csrf
-            @method('PUT')
+                                    Pending
 
-            <button class="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600">
+                                </option>
 
-                Complete
+                                <option value="approved"
+                                    {{ $booking->status == 'approved' ? 'selected' : '' }}>
 
-            </button>
+                                    Approved
 
-        </form>
+                                </option>
 
-    </div>
+                                <option value="completed"
+                                    {{ $booking->status == 'completed' ? 'selected' : '' }}>
 
-</td>
+                                    Completed
 
-            </tr>
+                                </option>
+
+                                <option value="cancelled"
+                                    {{ $booking->status == 'cancelled' ? 'selected' : '' }}>
+
+                                    Cancelled
+
+                                </option>
+
+                            </select>
+
+                        </form>
+
+                    </td>
+
+                </tr>
 
             @empty
 
-            <tr>
+                <tr>
 
-                <td colspan="5"
-                    class="text-center py-6 text-gray-400">
+                    <td colspan="5"
+                        class="text-center py-6 text-gray-400">
 
-                    No bookings found
+                        No bookings found
 
-                </td>
+                    </td>
 
-            </tr>
+                </tr>
 
             @endforelse
 

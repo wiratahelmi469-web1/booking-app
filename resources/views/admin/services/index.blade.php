@@ -57,7 +57,7 @@
 
                     @if($service->image)
 
-                    <img src="{{ asset('services/'.$service->image) }}"
+                    <img src="{{ asset('storage/'.$service->image) }}"
                          class="w-20 h-20 object-cover rounded-lg">
 
                     @else

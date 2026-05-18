@@ -4,17 +4,17 @@
 
 <h1 class="text-3xl font-bold mb-8">
 
-    Dashboard Admin
+    Dashboard Statistics
 
 </h1>
 
 <!-- STATS -->
-<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
 
     <!-- TOTAL BOOKINGS -->
     <div class="bg-white p-6 rounded-xl shadow">
 
-        <h2 class="text-gray-500 text-sm mb-2">
+        <h2 class="text-gray-500 mb-2">
 
             Total Bookings
 
@@ -31,7 +31,7 @@
     <!-- TOTAL SERVICES -->
     <div class="bg-white p-6 rounded-xl shadow">
 
-        <h2 class="text-gray-500 text-sm mb-2">
+        <h2 class="text-gray-500 mb-2">
 
             Total Services
 
@@ -48,7 +48,7 @@
     <!-- TOTAL USERS -->
     <div class="bg-white p-6 rounded-xl shadow">
 
-        <h2 class="text-gray-500 text-sm mb-2">
+        <h2 class="text-gray-500 mb-2">
 
             Total Users
 
@@ -62,10 +62,10 @@
 
     </div>
 
-    <!-- PENDING BOOKINGS -->
+    <!-- PENDING -->
     <div class="bg-white p-6 rounded-xl shadow">
 
-        <h2 class="text-gray-500 text-sm mb-2">
+        <h2 class="text-gray-500 mb-2">
 
             Pending Bookings
 
@@ -74,6 +74,40 @@
         <p class="text-4xl font-bold text-yellow-500">
 
             {{ $pendingBookings }}
+
+        </p>
+
+    </div>
+
+    <!-- COMPLETED -->
+    <div class="bg-white p-6 rounded-xl shadow">
+
+        <h2 class="text-gray-500 mb-2">
+
+            Completed Bookings
+
+        </h2>
+
+        <p class="text-4xl font-bold text-green-600">
+
+            {{ $completedBookings }}
+
+        </p>
+
+    </div>
+
+    <!-- REVENUE -->
+    <div class="bg-white p-6 rounded-xl shadow">
+
+        <h2 class="text-gray-500 mb-2">
+
+            Revenue
+
+        </h2>
+
+        <p class="text-4xl font-bold text-red-500">
+
+            Rp {{ number_format($revenue) }}
 
         </p>
 
