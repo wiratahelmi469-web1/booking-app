@@ -10,6 +10,30 @@ use Illuminate\Http\Request;
 class BookingController extends Controller
 {
     /**
+     * Display services page
+     */
+    public function services()
+    {
+        $services = Service::latest()->get();
+
+        return view(
+            'services.index',
+            compact('services')
+        );
+    }
+
+    /**
+     * Display single service
+     */
+    public function show(Service $service)
+    {
+        return view(
+            'services.show',
+            compact('service')
+        );
+    }
+
+    /**
      * Show booking form
      */
     public function create()
@@ -41,7 +65,7 @@ class BookingController extends Controller
             'status'       => 'pending',
         ]);
 
-        return redirect('/booking')
+        return redirect('/my-bookings')
             ->with(
                 'success',
                 'Booking created successfully'
@@ -91,7 +115,7 @@ class BookingController extends Controller
         $bookings = Booking::with('service')
             ->where(
                 'user_id',
-                auth()->user()->id
+                auth()->id()
             )
             ->latest()
             ->get();

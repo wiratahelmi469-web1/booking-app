@@ -22,7 +22,11 @@
     <div class="flex min-h-screen">
 
         <!-- SIDEBAR -->
-        <aside class="w-64 bg-gray-900 text-white p-6 shadow-lg">
+        <aside id="sidebar"
+               class="fixed md:static inset-y-0 left-0 z-50
+                      w-64 bg-gray-900 text-white p-6 shadow-lg
+                      transform -translate-x-full md:translate-x-0
+                      transition-transform duration-300">
 
             <!-- LOGO -->
             <div class="mb-10">
@@ -46,7 +50,7 @@
 
                 <!-- DASHBOARD -->
                 <a href="/admin/dashboard"
-                   class="block py-3 px-4 rounded-lg hover:bg-gray-700 transition duration-200">
+                   class="block py-3 px-4 rounded-xl hover:bg-gray-700 transition duration-200">
 
                     Dashboard
 
@@ -54,7 +58,7 @@
 
                 <!-- BOOKINGS -->
                 <a href="/admin/bookings"
-                   class="block py-3 px-4 rounded-lg hover:bg-gray-700 transition duration-200">
+                   class="block py-3 px-4 rounded-xl hover:bg-gray-700 transition duration-200">
 
                     Bookings
 
@@ -62,7 +66,7 @@
 
                 <!-- SERVICES -->
                 <a href="/admin/services"
-                   class="block py-3 px-4 rounded-lg hover:bg-gray-700 transition duration-200">
+                   class="block py-3 px-4 rounded-xl hover:bg-gray-700 transition duration-200">
 
                     Services
 
@@ -72,26 +76,57 @@
 
         </aside>
 
+        <!-- OVERLAY -->
+        <div id="overlay"
+             class="fixed inset-0 bg-black/50 z-40 hidden md:hidden">
+        </div>
+
         <!-- MAIN CONTENT -->
         <main class="flex-1 flex flex-col">
 
             <!-- NAVBAR -->
-            <header class="bg-white shadow px-6 py-4 flex justify-between items-center">
+            <header class="bg-white shadow px-4 md:px-6 py-4
+                           flex items-start md:items-center
+                           justify-between">
 
                 <!-- LEFT -->
-                <div>
+                <div class="flex items-center gap-4">
 
-                    <h2 class="text-2xl font-bold text-gray-800">
+                    <!-- MOBILE BUTTON -->
+                    <button id="menuButton"
+                            class="md:hidden">
 
-                        Admin Dashboard
+                        <svg xmlns="http://www.w3.org/2000/svg"
+                             class="w-7 h-7 text-gray-700"
+                             fill="none"
+                             viewBox="0 0 24 24"
+                             stroke="currentColor">
 
-                    </h2>
+                            <path stroke-linecap="round"
+                                  stroke-linejoin="round"
+                                  stroke-width="2"
+                                  d="M4 6h16M4 12h16M4 18h16" />
 
-                    <p class="text-sm text-gray-500">
+                        </svg>
 
-                        Welcome back 👋
+                    </button>
 
-                    </p>
+                    <!-- TITLE -->
+                    <div>
+
+                        <h2 class="text-2xl md:text-3xl font-bold text-gray-800 leading-tight">
+
+                            Admin Dashboard
+
+                        </h2>
+
+                        <p class="text-sm text-gray-500">
+
+                            Welcome back 👋
+
+                        </p>
+
+                    </div>
 
                 </div>
 
@@ -123,9 +158,11 @@
 
                     <!-- DROPDOWN MENU -->
                     <div id="dropdownMenu"
-                         class="hidden absolute right-0 mt-3 w-56 bg-white rounded-xl shadow-lg border overflow-hidden z-50">
+                         class="hidden absolute right-0 mt-3 w-56
+                                bg-white rounded-2xl shadow-xl
+                                border overflow-hidden z-50">
 
-                        <!-- USER INFO -->
+                        <!-- ROLE -->
                         <div class="px-5 py-4 border-b bg-gray-50">
 
                             <p class="text-sm text-gray-500">
@@ -144,7 +181,7 @@
 
                         <!-- PROFILE -->
                         <a href="{{ route('profile') }}"
-                           class="block px-5 py-3 hover:bg-gray-100 transition duration-200">
+                           class="block px-5 py-4 hover:bg-gray-100 transition">
 
                             Profile
 
@@ -160,7 +197,8 @@
                             @csrf
 
                             <button type="submit"
-                                    class="w-full text-left px-5 py-3 text-red-500 hover:bg-red-50 transition duration-200">
+                                    class="w-full text-left px-5 py-4
+                                           text-red-500 hover:bg-red-50 transition">
 
                                 Logout
 
@@ -175,7 +213,7 @@
             </header>
 
             <!-- PAGE CONTENT -->
-            <section class="flex-1 p-6">
+            <section class="flex-1 p-4 md:p-6">
 
                 @yield('content')
 
@@ -185,7 +223,7 @@
             <footer class="bg-white border-t px-6 py-4 text-center text-sm text-gray-500">
 
                 © {{ date('Y') }} Booking App —
-                Built with Laravel & Tailwind CSS 
+                Built with Laravel & Tailwind CSS 🚀
 
             </footer>
 
@@ -193,9 +231,36 @@
 
     </div>
 
-    <!-- DROPDOWN SCRIPT -->
+    <!-- SCRIPT -->
     <script>
 
+        // SIDEBAR
+        const sidebar =
+            document.getElementById('sidebar');
+
+        const menuButton =
+            document.getElementById('menuButton');
+
+        const overlay =
+            document.getElementById('overlay');
+
+        menuButton.addEventListener('click', () => {
+
+            sidebar.classList.remove('-translate-x-full');
+
+            overlay.classList.remove('hidden');
+
+        });
+
+        overlay.addEventListener('click', () => {
+
+            sidebar.classList.add('-translate-x-full');
+
+            overlay.classList.add('hidden');
+
+        });
+
+        // DROPDOWN
         const dropdownButton =
             document.getElementById('dropdownButton');
 
@@ -208,7 +273,7 @@
 
         });
 
-        // CLOSE WHEN CLICK OUTSIDE
+        // CLOSE DROPDOWN
         window.addEventListener('click', function(e) {
 
             if (

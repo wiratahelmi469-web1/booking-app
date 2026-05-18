@@ -37,9 +37,83 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('/dashboard', function () {
 
-        return view('dashboard');
+        $user = auth()->user();
+
+        $totalBookings = Booking::where(
+            'user_id',
+            $user->id
+        )->count();
+
+        $pendingBookings = Booking::where(
+            'user_id',
+            $user->id
+        )->where(
+            'status',
+            'pending'
+        )->count();
+
+        $completedBookings = Booking::where(
+            'user_id',
+            $user->id
+        )->where(
+            'status',
+            'completed'
+        )->count();
+
+        $cancelledBookings = Booking::where(
+            'user_id',
+            $user->id
+        )->where(
+            'status',
+            'cancelled'
+        )->count();
+
+        $recentBookings = Booking::with('service')
+            ->where(
+                'user_id',
+                $user->id
+            )
+            ->latest()
+            ->take(5)
+            ->get();
+
+        return view('dashboard', compact(
+            'totalBookings',
+            'pendingBookings',
+            'completedBookings',
+            'cancelledBookings',
+            'recentBookings'
+        ));
 
     })->name('dashboard');
+
+    /*
+    |--------------------------------------------------------------------------
+    | PROFILE
+    |--------------------------------------------------------------------------
+    */
+
+    Route::get('/profile', function () {
+
+        return view('profile.index');
+
+    })->name('profile');
+
+    /*
+    |--------------------------------------------------------------------------
+    | SERVICES
+    |--------------------------------------------------------------------------
+    */
+
+    Route::get(
+        '/services',
+        [BookingController::class, 'services']
+    )->name('services.index');
+
+    Route::get(
+        '/services/{service}',
+        [BookingController::class, 'show']
+    )->name('services.show');
 
     /*
     |--------------------------------------------------------------------------
@@ -47,13 +121,15 @@ Route::middleware(['auth'])->group(function () {
     |--------------------------------------------------------------------------
     */
 
-    Route::get('/booking',
-        [BookingController::class, 'create'])
-        ->name('booking.create');
+    Route::get(
+        '/booking',
+        [BookingController::class, 'create']
+    )->name('booking.create');
 
-    Route::post('/booking',
-        [BookingController::class, 'store'])
-        ->name('booking.store');
+    Route::post(
+        '/booking',
+        [BookingController::class, 'store']
+    )->name('booking.store');
 
     /*
     |--------------------------------------------------------------------------
@@ -61,26 +137,10 @@ Route::middleware(['auth'])->group(function () {
     |--------------------------------------------------------------------------
     */
 
-    Route::get('/my-bookings',
-        [BookingController::class, 'history'])
-        ->name('booking.history');
-
-});
-
-/*
-|--------------------------------------------------------------------------
-| PROFILE
-|--------------------------------------------------------------------------
-*/
-
-Route::middleware(['auth'])->group(function () {
-
-    Route::get('/profile',
-        function () {
-
-            return view('profile.index');
-
-        })->name('profile');
+    Route::get(
+        '/my-bookings',
+        [BookingController::class, 'history']
+    )->name('booking.history');
 
 });
 
@@ -116,24 +176,12 @@ Route::middleware(['auth', 'admin'])->group(function () {
             'completed'
         )->count();
 
-        $cancelledBookings = Booking::where(
-            'status',
-            'cancelled'
-        )->count();
-
-        $revenue = Booking::where(
-            'status',
-            'completed'
-        )->count() * 50000;
-
         return view('admin.dashboard', compact(
             'totalBookings',
             'totalServices',
             'totalUsers',
             'pendingBookings',
-            'completedBookings',
-            'cancelledBookings',
-            'revenue'
+            'completedBookings'
         ));
 
     })->name('admin.dashboard');
@@ -155,19 +203,21 @@ Route::middleware(['auth', 'admin'])->group(function () {
     |--------------------------------------------------------------------------
     */
 
-    Route::get('/admin/bookings',
-        [BookingController::class, 'index'])
-        ->name('admin.bookings');
+    Route::get(
+        '/admin/bookings',
+        [BookingController::class, 'index']
+    )->name('admin.bookings');
 
     /*
     |--------------------------------------------------------------------------
-    | BOOKING STATUS
+    | UPDATE BOOKING STATUS
     |--------------------------------------------------------------------------
     */
 
-    Route::patch('/admin/bookings/{booking}/status',
-        [BookingController::class, 'updateStatus'])
-        ->name('admin.bookings.status');
+    Route::patch(
+        '/admin/bookings/{booking}/status',
+        [BookingController::class, 'updateStatus']
+    )->name('admin.bookings.status');
 
 });
 
