@@ -8,7 +8,7 @@
     <meta name="viewport"
           content="width=device-width, initial-scale=1.0">
 
-    <title>User Dashboard</title>
+    <title>Booking App</title>
 
     @vite([
         'resources/css/app.css',
@@ -26,12 +26,12 @@
                class="fixed md:static inset-y-0 left-0 z-50
                       w-64 bg-blue-600 text-white p-6
                       transform -translate-x-full md:translate-x-0
-                      transition duration-300 ease-in-out">
+                      transition duration-300 ease-in-out shadow-xl">
 
             <!-- LOGO -->
             <div class="mb-10">
 
-                <h1 class="text-3xl font-bold">
+                <h1 class="text-3xl font-bold tracking-wide">
 
                     Booking App
 
@@ -48,42 +48,45 @@
             <!-- MENU -->
             <nav class="space-y-3">
 
+                <!-- DASHBOARD -->
                 <a href="/dashboard"
-                   class="block py-3 px-4 rounded-xl hover:bg-blue-700 transition">
+                   class="block py-3 px-4 rounded-xl hover:bg-blue-700 transition duration-200">
 
                     Dashboard
 
                 </a>
 
+                <!-- SERVICES -->
                 <a href="{{ route('services.index') }}"
-                   class="block py-3 px-4 rounded-xl hover:bg-blue-700 transition">
+                   class="block py-3 px-4 rounded-xl hover:bg-blue-700 transition duration-200">
 
-                    services
+                    Services
 
                 </a>
 
+                <!-- MY BOOKINGS -->
                 <a href="/my-bookings"
-                   class="block py-3 px-4 rounded-xl hover:bg-blue-700 transition">
+                   class="block py-3 px-4 rounded-xl hover:bg-blue-700 transition duration-200">
 
                     My Bookings
 
                 </a>
-
             </nav>
 
         </aside>
 
-        <!-- OVERLAY MOBILE -->
+        <!-- MOBILE OVERLAY -->
         <div id="overlay"
-             class="fixed inset-0 bg-black/40 z-40 hidden md:hidden"></div>
+             class="fixed inset-0 bg-black/40 z-40 hidden md:hidden">
 
-        <!-- MAIN CONTENT -->
-        <main class="flex-1 flex flex-col md:ml-0">
+        </div>
+
+        <!-- MAIN -->
+        <main class="flex-1 flex flex-col">
 
             <!-- NAVBAR -->
             <header class="bg-white shadow px-4 md:px-6 py-4
-                           flex items-start md:items-center
-                           justify-between">
+                           flex items-center justify-between">
 
                 <!-- LEFT -->
                 <div class="flex items-center gap-4">
@@ -110,7 +113,7 @@
                     <!-- TITLE -->
                     <div>
 
-                        <h2 class="text-2xl md:text-3xl font-bold text-gray-800 leading-tight">
+                        <h2 class="text-2xl md:text-3xl font-bold text-gray-800">
 
                             User Dashboard
 
@@ -131,7 +134,8 @@
 
                     <!-- BUTTON -->
                     <button id="dropdownButton"
-                            class="flex items-center gap-2 text-gray-700 font-semibold">
+                            class="flex items-center gap-2
+                                   text-gray-700 font-semibold">
 
                         {{ auth()->user()->name }}
 
@@ -150,10 +154,10 @@
 
                     </button>
 
-                    <!-- MENU -->
+                    <!-- DROPDOWN MENU -->
                     <div id="dropdownMenu"
-                         class="hidden absolute right-0 mt-3 w-56
-                                bg-white rounded-2xl shadow-xl
+                         class="hidden absolute right-0 mt-3 w-60
+                                bg-white rounded-2xl shadow-2xl
                                 border overflow-hidden z-50">
 
                         <!-- USER INFO -->
@@ -175,7 +179,8 @@
 
                         <!-- PROFILE -->
                         <a href="/profile"
-                           class="block px-5 py-4 hover:bg-gray-100 transition">
+                           class="block px-5 py-4
+                                  hover:bg-gray-100 transition">
 
                             Profile
 
@@ -203,7 +208,7 @@
 
             </header>
 
-            <!-- PAGE CONTENT -->
+            <!-- CONTENT -->
             <section class="flex-1 p-4 md:p-6">
 
                 @yield('content')
@@ -211,7 +216,7 @@
             </section>
 
             <!-- FOOTER -->
-            <footer class="bg-white border-t text-center py-4 text-sm text-gray-500">
+            <footer class="bg-white border-t py-4 text-center text-sm text-gray-500">
 
                 © {{ date('Y') }} Booking App —
                 Built with Laravel & TailwindCSS 🚀
@@ -225,7 +230,12 @@
     <!-- SCRIPT -->
     <script>
 
-        // SIDEBAR
+        /*
+        |--------------------------------------------------------------------------
+        | SIDEBAR
+        |--------------------------------------------------------------------------
+        */
+
         const menuButton =
             document.getElementById('menuButton');
 
@@ -251,21 +261,33 @@
 
         });
 
-        // DROPDOWN
+        /*
+        |--------------------------------------------------------------------------
+        | DROPDOWN
+        |--------------------------------------------------------------------------
+        */
+
         const dropdownButton =
             document.getElementById('dropdownButton');
 
         const dropdownMenu =
             document.getElementById('dropdownMenu');
 
-        dropdownButton.addEventListener('click', () => {
+        dropdownButton.addEventListener('click', (e) => {
+
+            e.stopPropagation();
 
             dropdownMenu.classList.toggle('hidden');
 
         });
 
-        // CLOSE DROPDOWN
-        window.addEventListener('click', function(e) {
+        /*
+        |--------------------------------------------------------------------------
+        | CLOSE DROPDOWN
+        |--------------------------------------------------------------------------
+        */
+
+        window.addEventListener('click', function (e) {
 
             if (
                 !dropdownButton.contains(e.target) &&

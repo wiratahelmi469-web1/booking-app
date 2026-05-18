@@ -160,11 +160,23 @@ Route::middleware(['auth', 'admin'])->group(function () {
 
     Route::get('/admin/dashboard', function () {
 
+        /*
+        |--------------------------------------------------------------------------
+        | TOTAL DATA
+        |--------------------------------------------------------------------------
+        */
+
         $totalBookings = Booking::count();
 
         $totalServices = Service::count();
 
         $totalUsers = User::count();
+
+        /*
+        |--------------------------------------------------------------------------
+        | BOOKING STATUS
+        |--------------------------------------------------------------------------
+        */
 
         $pendingBookings = Booking::where(
             'status',
@@ -176,19 +188,47 @@ Route::middleware(['auth', 'admin'])->group(function () {
             'completed'
         )->count();
 
+        $cancelledBookings = Booking::where(
+            'status',
+            'cancelled'
+        )->count();
+
+        /*
+        |--------------------------------------------------------------------------
+        | REVENUE
+        |--------------------------------------------------------------------------
+        */
+
+        $revenue = Booking::where(
+            'status',
+            'completed'
+        )->with('service')->get()->sum(function ($booking) {
+
+            return $booking->service->price ?? 0;
+
+        });
+
+        /*
+        |--------------------------------------------------------------------------
+        | RETURN VIEW
+        |--------------------------------------------------------------------------
+        */
+
         return view('admin.dashboard', compact(
             'totalBookings',
             'totalServices',
             'totalUsers',
             'pendingBookings',
-            'completedBookings'
+            'completedBookings',
+            'cancelledBookings',
+            'revenue'
         ));
 
     })->name('admin.dashboard');
 
     /*
     |--------------------------------------------------------------------------
-    | SERVICES CRUD
+    | ADMIN SERVICES
     |--------------------------------------------------------------------------
     */
 
@@ -199,7 +239,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
 
     /*
     |--------------------------------------------------------------------------
-    | BOOKING MANAGEMENT
+    | ADMIN BOOKINGS
     |--------------------------------------------------------------------------
     */
 
@@ -227,4 +267,4 @@ Route::middleware(['auth', 'admin'])->group(function () {
 |--------------------------------------------------------------------------
 */
 
-require __DIR__.'/auth.php';
+require __DIR__.'/auth.php';    

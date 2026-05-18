@@ -125,4 +125,5 @@ class BookingController extends Controller
             compact('bookings')
         );
     }
+
 }
