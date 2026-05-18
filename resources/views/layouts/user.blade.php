@@ -137,22 +137,55 @@
                 <div class="relative">
 
                     <!-- BUTTON -->
-                    <button id="dropdownButton"
-                            class="flex items-center gap-2
-                                   text-gray-700 font-semibold">
+                   <button id="dropdownButton"
+                            class="flex items-center gap-3 text-gray-700">
 
-                        {{ auth()->user()->name }}
+                        <!-- AVATAR -->
+                        @if(auth()->user()->profile_photo)
 
+                            <img src="{{ asset('storage/'.auth()->user()->profile_photo) }}"
+                                class="w-11 h-11 rounded-full object-cover">
+
+                        @else
+
+                            <div class="w-11 h-11 rounded-full bg-blue-100
+                                        flex items-center justify-center
+                                        font-bold text-blue-600">
+
+                                {{ strtoupper(substr(auth()->user()->name, 0, 1)) }}
+
+                            </div>
+
+                        @endif
+
+                        <!-- USER INFO -->
+                        <div class="text-right hidden sm:block">
+
+                            <h2 class="font-semibold text-gray-800 leading-tight">
+
+                                {{ auth()->user()->name }}
+
+                            </h2>
+
+                            <p class="text-sm text-gray-500 capitalize">
+
+                                {{ auth()->user()->role }}
+
+                            </p>
+
+                        </div>
+
+                        <!-- ICON -->
                         <svg xmlns="http://www.w3.org/2000/svg"
-                             class="w-5 h-5"
-                             fill="none"
-                             viewBox="0 0 24 24"
-                             stroke="currentColor">
+                            class="w-5 h-5"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor">
 
                             <path stroke-linecap="round"
-                                  stroke-linejoin="round"
-                                  stroke-width="2"
-                                  d="M19 9l-7 7-7-7" />
+                                stroke-linejoin="round"
+                                stroke-width="2"
+                                d="M19 9l-7 7-7-7" />
 
                         </svg>
 

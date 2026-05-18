@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 use App\Models\Booking;
@@ -39,6 +40,12 @@ Route::middleware(['auth'])->group(function () {
 
         $user = auth()->user();
 
+        /*
+        |--------------------------------------------------------------------------
+        | BOOKING STATISTICS
+        |--------------------------------------------------------------------------
+        */
+
         $totalBookings = Booking::where(
             'user_id',
             $user->id
@@ -68,6 +75,12 @@ Route::middleware(['auth'])->group(function () {
             'cancelled'
         )->count();
 
+        /*
+        |--------------------------------------------------------------------------
+        | RECENT BOOKINGS
+        |--------------------------------------------------------------------------
+        */
+
         $recentBookings = Booking::with('service')
             ->where(
                 'user_id',
@@ -77,14 +90,36 @@ Route::middleware(['auth'])->group(function () {
             ->take(5)
             ->get();
 
+        /*
+        |--------------------------------------------------------------------------
+        | SEARCH SERVICES
+        |--------------------------------------------------------------------------
+        */
+
         $search = request('search');
 
-        $services = Service::when($search, function ($query) use ($search) {
+        $services = Service::when(
+            $search,
+            function ($query) use ($search) {
 
-            $query->where('name', 'like', "%{$search}%")
-                ->orWhere('description', 'like', "%{$search}%");
+                $query->where(
+                    'name',
+                    'like',
+                    "%{$search}%"
+                )->orWhere(
+                    'description',
+                    'like',
+                    "%{$search}%"
+                );
 
-        })->latest()->take(6)->get();
+            }
+        )->latest()->take(6)->get();
+
+        /*
+        |--------------------------------------------------------------------------
+        | RETURN VIEW
+        |--------------------------------------------------------------------------
+        */
 
         return view('dashboard', compact(
             'totalBookings',
@@ -109,6 +144,76 @@ Route::middleware(['auth'])->group(function () {
         return view('profile.index');
 
     })->name('profile');
+
+    /*
+    |--------------------------------------------------------------------------
+    | UPDATE PROFILE PHOTO
+    |--------------------------------------------------------------------------
+    */
+
+    Route::post('/profile/update-photo', function (Request $request) {
+
+        $request->validate([
+            'profile_photo' => 'required|image|mimes:jpg,jpeg,png|max:2048',
+        ]);
+
+        $user = User::find(auth()->id());
+
+        if ($request->hasFile('profile_photo')) {
+
+            $photo = $request->file('profile_photo')
+                ->store('profiles', 'public');
+
+            $user->update([
+                'profile_photo' => $photo,
+            ]);
+
+        }
+
+        return back()->with(
+            'success',
+            'Profile photo updated successfully'
+        );
+
+    })->name('profile.photo');
+
+    /*
+    |--------------------------------------------------------------------------
+    | UPDATE PROFILE INFORMATION
+    |--------------------------------------------------------------------------
+    */
+
+    Route::put('/profile/update', function (Request $request) {
+
+        $request->validate([
+            'name'     => 'required',
+            'email'    => 'required|email',
+            'password' => 'nullable|confirmed|min:6',
+        ]);
+
+        $user = User::find(auth()->id());
+
+        $data = [
+            'name'  => $request->name,
+            'email' => $request->email,
+        ];
+
+        if ($request->password) {
+
+            $data['password'] = bcrypt(
+                $request->password
+            );
+
+        }
+
+        $user->update($data);
+
+        return back()->with(
+            'success',
+            'Profile updated successfully'
+        );
+
+    })->name('profile.update');
 
     /*
     |--------------------------------------------------------------------------
