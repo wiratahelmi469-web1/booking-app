@@ -2,43 +2,62 @@
 
 @section('content')
 
-<div class="mb-10">
+<!-- HERO -->
+<div class="relative rounded-3xl overflow-hidden mb-10">
 
-    <!-- HEADER -->
-    <div class="mb-8">
+    <div class="h-[320px] bg-gradient-to-r from-blue-700 to-blue-500">
 
-        <h1 class="text-4xl font-bold text-gray-800 mb-2">
+        <div class="absolute inset-0 bg-black/30"></div>
 
-            Discover Services ✨
+        <div class="relative z-10 h-full flex flex-col justify-center px-10">
 
-        </h1>
+            <h1 class="text-5xl font-bold text-white mb-4">
 
-        <p class="text-gray-500 text-lg">
+                Find Your Perfect Service ✨
 
-            Find and book the best services easily.
+            </h1>
 
-        </p>
+            <p class="text-blue-100 text-lg max-w-2xl">
+
+                Book premium services quickly and easily with modern experience.
+
+            </p>
+
+        </div>
 
     </div>
 
-    <!-- SEARCH -->
-    <div class="bg-white rounded-2xl shadow-lg p-5 mb-10">
+</div>
+
+<!-- SEARCH -->
+<div class="bg-white rounded-2xl shadow-xl p-5 mb-10">
+
+    <div class="flex items-center gap-4">
 
         <input type="text"
                placeholder="Search services..."
                class="w-full border-0 focus:ring-0 text-lg">
 
+        <button class="bg-blue-600 text-white px-8 py-3 rounded-xl hover:bg-blue-700 transition">
+
+            Search
+
+        </button>
+
     </div>
 
-    <!-- SERVICES GRID -->
-    <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
+</div>
 
-        @forelse($services as $service)
+<!-- SERVICES -->
+<div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
 
-        <div class="bg-white rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl transition duration-300 group">
+    @forelse($services as $service)
+
+        <!-- CARD -->
+        <div class="bg-white rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl hover:-translate-y-2 transition duration-300 group">
 
             <!-- IMAGE -->
-            <div class="relative overflow-hidden h-64">
+            <div class="relative h-64 overflow-hidden">
 
                 @if($service->image)
 
@@ -57,9 +76,13 @@
                 @endif
 
                 <!-- PRICE -->
-                <div class="absolute top-4 right-4 bg-white px-4 py-2 rounded-full shadow font-bold text-blue-600">
+                <div class="absolute top-4 right-4 bg-white shadow-lg px-4 py-2 rounded-full">
 
-                    Rp {{ number_format($service->price) }}
+                    <span class="font-bold text-blue-600">
+
+                        Rp {{ number_format($service->price) }}
+
+                    </span>
 
                 </div>
 
@@ -107,11 +130,12 @@
 
         </div>
 
-        @empty
+    @empty
 
-        <div class="col-span-3">
+        <!-- EMPTY -->
+        <div class="col-span-full">
 
-            <div class="bg-white rounded-3xl p-10 text-center shadow">
+            <div class="bg-white rounded-3xl p-10 shadow text-center">
 
                 <h2 class="text-2xl font-bold text-gray-700 mb-2">
 
@@ -129,9 +153,7 @@
 
         </div>
 
-        @endforelse
-
-    </div>
+    @endforelse
 
 </div>
 

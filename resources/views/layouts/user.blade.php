@@ -57,10 +57,10 @@
                 </a>
 
                 <!-- SERVICES -->
-                <a href="{{ route('services.index') }}"
+                <a href="/booking"
                    class="block py-3 px-4 rounded-xl hover:bg-blue-700 transition duration-200">
 
-                    Services
+                    Booking
 
                 </a>
 
