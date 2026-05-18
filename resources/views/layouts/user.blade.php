@@ -23,10 +23,12 @@
 
         <!-- SIDEBAR -->
         <aside id="sidebar"
-               class="fixed md:static inset-y-0 left-0 z-50
-                      w-64 bg-blue-600 text-white p-6
-                      transform -translate-x-full md:translate-x-0
-                      transition duration-300 ease-in-out shadow-xl">
+        class="fixed md:sticky top-0 left-0
+              h-screen w-64
+              bg-blue-600 text-white p-6
+              shadow-xl z-50
+              transform -translate-x-full md:translate-x-0
+              transition duration-300 ease-in-out">
 
             <!-- LOGO -->
             <div class="mb-10">
@@ -85,8 +87,10 @@
         <main class="flex-1 flex flex-col">
 
             <!-- NAVBAR -->
-            <header class="bg-white shadow px-4 md:px-6 py-4
-                           flex items-center justify-between">
+            <header class="sticky top-0 z-40
+                            bg-white/90 backdrop-blur-lg
+                            shadow px-4 md:px-6 py-4
+                            flex items-center justify-between">
 
                 <!-- LEFT -->
                 <div class="flex items-center gap-4">

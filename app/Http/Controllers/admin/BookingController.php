@@ -38,11 +38,21 @@ class BookingController extends Controller
      */
     public function create()
     {
-        $services = Service::latest()->get();
+        $search = request('search');
+
+        $services = Service::when($search, function ($query) use ($search) {
+
+            $query->where('name', 'like', "%{$search}%")
+                ->orWhere('description', 'like', "%{$search}%");
+
+        })->latest()->get();
 
         return view(
             'booking.create',
-            compact('services')
+            compact(
+                'services',
+                'search'
+            )
         );
     }
 

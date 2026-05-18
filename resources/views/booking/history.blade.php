@@ -32,7 +32,30 @@
                 <!-- SERVICE -->
                 <td class="py-3">
 
-                    {{ $booking->service->name }}
+                    <div class="flex items-center gap-4">
+                        
+                        <!-- IMAGE -->
+                        <img src="{{ asset('storage/'.$booking->service->image) }}"
+                            class="w-20 h-20 rounded-2xl object-cover">
+
+                        <!-- INFO -->
+                        <div>
+
+                            <h3 class="font-bold text-gray-800">
+
+                                {{ $booking->service->name }}
+
+                            </h3>
+
+                            <p class="text-gray-500">
+
+                                Rp {{ number_format($booking->service->price) }}
+
+                            </p>
+
+                        </div>
+
+                    </div>
 
                 </td>
 
